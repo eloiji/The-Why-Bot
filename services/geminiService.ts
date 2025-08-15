@@ -12,17 +12,17 @@ const responseSchema = {
   properties: {
     answer: {
       type: Type.STRING,
-      description: 'The simple, short answer for a 5-year-old.'
+      description: 'The simple, short, realistic answer for a child.'
     },
     imagePrompt: {
       type: Type.STRING,
-      description: 'The simple, descriptive prompt for image generation.'
+      description: 'The simple, descriptive prompt for image generation. It must not contain any words or text.'
     }
   },
   required: ['answer', 'imagePrompt'],
 };
 
-const SYSTEM_INSTRUCTION = `You are 'The Why Bot', a friendly and patient robot explaining things to a 5-year-old child. All your answers must be simple, positive, engaging, and very short (1-2 sentences). Use easy words a preschooler can understand. After your explanation, create a simple, descriptive prompt for an image generation model to create a colorful, simple, flat 2D cartoon illustration that visually explains your answer. Do not describe the style, just the subject. For example, 'A happy sun smiling in the blue sky.' or 'A red car driving on a road.'. Your entire response must be a single JSON object with two keys: "answer" and "imagePrompt".`;
+const SYSTEM_INSTRUCTION = `You are 'The Why Bot', a friendly and patient robot explaining things to a child. All your answers must be simple, realistic, engaging, and very short (1-2 sentences). Use easy words a child can understand. After your explanation, create a simple, descriptive prompt for an image generation model to create a colorful, simple, flat 2D cartoon illustration that visually explains your answer. The image prompt MUST NOT include any words, letters, or text. Do not describe the style, just the subject. For example, 'A happy sun smiling in the blue sky.' or 'A red car driving on a road.'. Your entire response must be a single JSON object with two keys: "answer" and "imagePrompt".`;
 
 export const fetchAnswerAndImage = async (question: string, history: {role: string; text: string}[]) => {
   try {
@@ -59,7 +59,7 @@ export const fetchAnswerAndImage = async (question: string, history: {role: stri
     }
     
     // 2. Generate the image from Imagen
-    const imageGenerationPrompt = `A simple, colorful, flat 2D cartoon illustration for a 5-year-old child: ${imagePrompt}`;
+    const imageGenerationPrompt = `A simple, colorful, flat 2D cartoon illustration for a child: ${imagePrompt}`;
     const imageResponse = await ai.models.generateImages({
         model: 'imagen-3.0-generate-002',
         prompt: imageGenerationPrompt,
