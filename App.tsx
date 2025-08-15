@@ -75,7 +75,7 @@ const App: React.FC = () => {
           {chatHistory.length === 0 && !isLoading && (
             <div className="text-center text-gray-500 mt-10">
               <p className="text-xl">Hello! I'm the Why Bot.</p>
-              <p>Ask me anything, and I'll explain it for a 5-year-old!</p>
+              <p>What are you wondering about? Ask away, and we'll explore the answer together!</p>
             </div>
           )}
 
