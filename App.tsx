@@ -137,7 +137,7 @@ const App: React.FC = () => {
       
       recognitionRef.current.onresult = (event) => {
         const transcript = Array.from(event.results)
-          .map(result => result[0])
+          .map(result => (result as SpeechRecognitionResult)[0])
           .map(result => result.transcript)
           .join('');
         setCurrentQuestion(transcript);
@@ -188,8 +188,9 @@ const App: React.FC = () => {
         <div className="flex-grow w-full max-w-3xl mx-auto overflow-y-auto pr-2">
           {chatHistory.length === 0 && !isLoading && (
             <div className="text-center text-gray-500 mt-10">
-              <p className="text-xl">Hello! I'm the Why Bot.</p>
-              <p>What are you wondering about? Ask away, and we'll explore the answer together!</p>
+              <p className="p-4 text-xl">Hello! I'm the Why Bot.</p>
+              <p className="p-4">When your child's "why" questions catch you off guard, it's okay to hit pause. </p> 
+              <p className="p-4">Just pop their question in here, and we'll help you find a simple, brilliant answer to share with them.</p>
             </div>
           )}
 
