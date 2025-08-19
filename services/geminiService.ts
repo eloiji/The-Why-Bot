@@ -12,17 +12,17 @@ const responseSchema = {
   properties: {
     answer: {
       type: Type.STRING,
-      description: 'The simple, short, realistic answer for a child.'
+      description: 'The simple, short, factual answer for a child.'
     },
     imagePrompt: {
       type: Type.STRING,
-      description: 'The simple, descriptive prompt for image generation. It must not contain any words or text.'
+      description: 'The detailed, descriptive prompt for image generation. It must not contain any words or text.'
     }
   },
   required: ['answer', 'imagePrompt'],
 };
 
-const SYSTEM_INSTRUCTION = `You are 'The Why Bot', a friendly and patient robot helping parents explain things to a preschool-aged child. Your top priority is child safety. If a question is unsafe or inappropriate (e.g., violence, scary topics, adult themes), provide a gentle refusal. For an inappropriate question, your JSON 'answer' must be a friendly redirection like "That's a question for the grown-ups! Let's talk about something fun instead." and the 'imagePrompt' must be something cheerful and generic, like "a happy smiling sun in a blue sky". For safe questions, provide answers that are simple, realistic, engaging, and very short (1-2 sentences). Then, create a simple, descriptive 'imagePrompt' for a colorful, simple, realistic illustration that visually explains your answer. The image prompt MUST NOT include any words, letters, or text. Your entire response must be a single JSON object with two keys: "answer" and "imagePrompt".`;
+const SYSTEM_INSTRUCTION = `You are 'The Why Bot', a friendly and patient robot explaining things to a young child. Your top priority is child safety. If a question is unsafe or inappropriate (e.g., violence, scary topics, adult themes), provide a gentle refusal. For an inappropriate question, your JSON 'answer' must be a friendly redirection like "That's a question for the grown-ups! Let's talk about something fun instead." and the 'imagePrompt' must be something cheerful and generic, like "an excited and happy robot with a LED face". For safe questions, provide answers that are simple, factual, engaging, and very short (1-2 sentences). Then, create a very detailed 'imagePrompt' for a hyper-realistic and detailed image that visually explains your answer. The image prompt MUST NOT include any words, letters, or text. Your entire response must be a single JSON object with two keys: "answer" and "imagePrompt".`;
 
 const safetySettings = [
   {
@@ -74,7 +74,7 @@ export const fetchAnswerAndImage = async (question: string, history: {role: stri
     if (textResponse.promptFeedback?.blockReason || (candidate && candidate.finishReason === 'SAFETY')) {
       console.warn(`Request or response blocked due to safety settings. Reason: ${textResponse.promptFeedback?.blockReason || candidate?.finishReason}`);
       answer = "That's a question for the grown-ups! Let's talk about something fun instead.";
-      imagePrompt = "a happy smiling sun in a blue sky";
+      imagePrompt = "an excited and happy robot with a LED face.";
     } else {
         const jsonText = textResponse.text.trim();
         if (!jsonText) {
@@ -91,7 +91,7 @@ export const fetchAnswerAndImage = async (question: string, history: {role: stri
     }
     
     // 2. Generate the image from Imagen
-    const imageGenerationPrompt = `A simple, colorful, realistic illustration: ${imagePrompt}`;
+    const imageGenerationPrompt = `A hyper-realistic and detailed image: ${imagePrompt}`;
     const imageResponse = await ai.models.generateImages({
         model: 'imagen-3.0-generate-002',
         prompt: imageGenerationPrompt,
