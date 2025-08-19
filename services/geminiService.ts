@@ -1,5 +1,5 @@
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI, Type, HarmCategory, HarmBlockThreshold } from "@google/genai";
 
 if (!process.env.API_KEY) {
   throw new Error("API_KEY environment variable not set");
@@ -22,10 +22,32 @@ const responseSchema = {
   required: ['answer', 'imagePrompt'],
 };
 
-const SYSTEM_INSTRUCTION = `You are 'The Why Bot', a friendly and patient robot explaining things to a child. All your answers must be simple, realistic, engaging, and very short (1-2 sentences). Use easy words a child can understand. After your explanation, create a simple, descriptive prompt for an image generation model to create a colorful, simple, flat 2D cartoon illustration that visually explains your answer. The image prompt MUST NOT include any words, letters, or text. Do not describe the style, just the subject. For example, 'A happy sun smiling in the blue sky.' or 'A red car driving on a road.'. Your entire response must be a single JSON object with two keys: "answer" and "imagePrompt".`;
+const SYSTEM_INSTRUCTION = `You are 'The Why Bot', a friendly and patient robot explaining things to a preschool-aged child. Your top priority is child safety. If a question is unsafe or inappropriate (e.g., violence, scary topics, adult themes), provide a gentle refusal. For an inappropriate question, your JSON 'answer' must be a friendly redirection like "That's a question for the grown-ups! Let's talk about something fun instead." and the 'imagePrompt' must be something cheerful and generic, like "a happy smiling sun in a blue sky". For safe questions, provide answers that are simple, realistic, engaging, and very short (1-2 sentences). Then, create a simple, descriptive 'imagePrompt' for a colorful, simple, flat 2D cartoon illustration that visually explains your answer. The image prompt MUST NOT include any words, letters, or text. Your entire response must be a single JSON object with two keys: "answer" and "imagePrompt".`;
+
+const safetySettings = [
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+];
 
 export const fetchAnswerAndImage = async (question: string, history: {role: string; text: string}[]) => {
   try {
+    let answer: string;
+    let imagePrompt: string;
+
     // 1. Get the text answer and image prompt from Gemini
     const fullPrompt = `
       Here is the conversation so far:
@@ -43,19 +65,29 @@ export const fetchAnswerAndImage = async (question: string, history: {role: stri
           systemInstruction: SYSTEM_INSTRUCTION,
           responseMimeType: "application/json",
           responseSchema: responseSchema,
+          safetySettings: safetySettings,
         }
     });
     
-    const jsonText = textResponse.text.trim();
-    if (!jsonText) {
-        throw new Error("Received an empty response from the text model.");
-    }
+    // Check for API-level safety blocks on the prompt or response
+    const candidate = textResponse.candidates?.[0];
+    if (textResponse.promptFeedback?.blockReason || (candidate && candidate.finishReason === 'SAFETY')) {
+      console.warn(`Request or response blocked due to safety settings. Reason: ${textResponse.promptFeedback?.blockReason || candidate?.finishReason}`);
+      answer = "That's a question for the grown-ups! Let's talk about something fun instead.";
+      imagePrompt = "a happy smiling sun in a blue sky";
+    } else {
+        const jsonText = textResponse.text.trim();
+        if (!jsonText) {
+            throw new Error("Received an empty response from the text model.");
+        }
 
-    const parsedResponse = JSON.parse(jsonText);
-    const { answer, imagePrompt } = parsedResponse;
+        const parsedResponse = JSON.parse(jsonText);
+        answer = parsedResponse.answer;
+        imagePrompt = parsedResponse.imagePrompt;
 
-    if (!answer || !imagePrompt) {
-      throw new Error("Invalid JSON structure in response.");
+        if (!answer || !imagePrompt) {
+          throw new Error("Invalid JSON structure in response.");
+        }
     }
     
     // 2. Generate the image from Imagen
