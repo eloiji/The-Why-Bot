@@ -15,17 +15,15 @@ https://ai.studio/apps/drive/1czLFp1RElCBgnb4JpxlOzYDJTCUcg60p
    `npm run dev`
 
 ## WhyBot: An AI Chatbot for Parents with Curious Kids
-This project is a portfolio piece demonstrating the creation of WhyBot, an interactive chatbot designed to help parents and caregivers answer a child’s endless "why" questions. The bot provides simple, engaging explanations paired with custom-generated, colorful, realistic illustrations.
+This project is a portfolio piece demonstrating the creation of WhyBot, an interactive chatbot designed to help parents and caregivers answer a child’s endless "why" questions. The bot provides simple, engaging explanations paired with custom-generated, detailed, hyper-realistic images.
 
 ## Key Features:
 
-- **Interactive Q&A**: Delivers simple, engaging answers tailored for a young audience.
-
-- **Audio & Voice Input**: Accepts voice commands and provides spoken replies for an interactive experience.
-
-- **AI-Generated Illustrations**: Creates custom, realistic illustrations to accompany each explanation.
-
-- **Safety-First Design**: Implements robust safety features to ensure all content is appropriate and suitable for children.
+* **Interactive Q&A**: Delivers simple, engaging answers tailored for a young audience.
+* **Audio & Voice Input**: Accepts voice commands and provides spoken replies for an interactive experience.
+* **AI-Generated Images**: Creates custom, detailed, realistic images to accompany each explanation.
+* **In-App Guidance**: Provides easy-to-access information on how to use the app, available anytime from the header.
+* **Safety-First Design**: Implements robust safety features to ensure all content is appropriate and suitable for children.
 
 ## Development Process
 - **Ideation & Prompt Engineering**: I used the Gemini Brainstorm Gem to conceptualize the app and refined a specific prompt in Google AI Studio to meet the unique requirements of a children's bot.
