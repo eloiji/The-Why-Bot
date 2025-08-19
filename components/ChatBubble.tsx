@@ -1,13 +1,13 @@
-
 import React from 'react';
 import type { ChatMessage } from '../types';
-import { UserIcon, BotIcon } from './Icons';
+import { UserIcon, BotIcon, PlayIcon } from './Icons';
 
 interface ChatBubbleProps {
   message: ChatMessage;
+  onReplayAudio: (text: string) => void;
 }
 
-const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
+const ChatBubble: React.FC<ChatBubbleProps> = ({ message, onReplayAudio }) => {
   const isUser = message.role === 'user';
 
   if (isUser) {
@@ -26,7 +26,16 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
     <div className="flex items-start space-x-3 p-4">
       <BotIcon className="h-10 w-10 text-sky-500 flex-shrink-0" />
       <div className="bg-white rounded-2xl rounded-bl-none p-4 shadow-md max-w-md space-y-3">
-        <p className="text-gray-800">{message.text}</p>
+        <div className="flex items-start justify-between gap-2">
+            <p className="text-gray-800">{message.text}</p>
+             <button
+              onClick={() => onReplayAudio(message.text)}
+              className="flex-shrink-0 text-sky-500 hover:text-sky-700 transition-colors p-1 -mt-1 -mr-1 rounded-full hover:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
+              aria-label="Replay audio for this message"
+            >
+              <PlayIcon className="h-6 w-6" />
+            </button>
+        </div>
         {message.imageUrl && (
           <img
             src={message.imageUrl}
