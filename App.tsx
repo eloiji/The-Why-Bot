@@ -191,6 +191,7 @@ const App: React.FC = () => {
               <p className="p-4 text-xl">Hello! I'm the Why Bot.</p>
               <p className="p-4">When your child's "why" questions catch you off guard, it's okay to hit pause. </p> 
               <p className="p-4">Just pop their question in here, and we'll help you find a simple, brilliant answer to share with them.</p>
+              <p className="p-4"><em>Remember to always evaluate the AI's response for accuracy.</em></p>
             </div>
           )}
 
