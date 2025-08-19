@@ -14,16 +14,29 @@ https://ai.studio/apps/drive/1czLFp1RElCBgnb4JpxlOzYDJTCUcg60p
 3. Run the app:
    `npm run dev`
 
-## Process
+## WhyBot: An AI Chatbot for Parents with Curious Kids
+This project is a portfolio piece demonstrating the creation of WhyBot, an interactive chatbot designed to help parents and caregivers answer a child’s endless "why" questions. The bot provides simple, engaging explanations paired with custom-generated, colorful, realistic illustrations.
 
-1. I used Gemini Brainstorm Gem to think of AI app ideas.
-2. I chose one from the five ideas it suggested.
-3. I asked it to create a prompt based on that idea.
-4. It gave me a very specific prompt. I copied it and edited it according to my initial requirements - a chat bot to answer the endless "whys" of a preschooler.
-5. I opened the build app feature in Google AI Studio and entered my prompt.
-6. After generating the code, I started to evaluate it by testing some questions and answaers, and checking the image it generates.
-7. I used iteration to get the behavior I wanted from the app.
-8. I also edited the code for gemini service, to change the prompts being passed to the Gemini API.
-9. Next, I used prompt chaining to add features like accepting voice input and adding audio output for the bot's reply. 
-10. More importantly, I added a safety features since this app is for kids.
+## Key Features:
 
+- **Interactive Q&A**: Delivers simple, engaging answers tailored for a young audience.
+
+- **Audio & Voice Input**: Accepts voice commands and provides spoken replies for an interactive experience.
+
+- **AI-Generated Illustrations**: Creates custom, realistic illustrations to accompany each explanation.
+
+- **Safety-First Design**: Implements robust safety features to ensure all content is appropriate and suitable for children.
+
+## Development Process
+- **Ideation & Prompt Engineering**: I used the Gemini Brainstorm Gem to conceptualize the app and refined a specific prompt in Google AI Studio to meet the unique requirements of a children's bot.
+
+- **Iterative Development**: I conducted thorough testing and iterative edits on the code and prompts to achieve the desired behavior and accuracy.
+
+- **Advanced Functionality**: Using prompt chaining, I added core features like voice input and audio output to create a more natural user experience.
+
+- **Safety Implementation**: I prioritized and implemented critical safety features to ensure the bot's responses are safe and suitable for a young audience.
+
+## Disclaimer
+- This app is a portfolio piece and is not intended for commercial use or as a substitute for professional advice.
+
+- When interacting with any AI, always evaluate the responses for appropriateness and accuracy.
